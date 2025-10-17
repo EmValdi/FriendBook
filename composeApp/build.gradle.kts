@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 kotlin {
@@ -29,6 +31,10 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.com.google.firebase.firebase.analytics)
+            implementation(libs.com.google.firebase.firebase.crashlytics)
+            implementation(libs.google.firebase.firestore)
+            implementation(libs.google.firebase.auth)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -39,6 +45,9 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.firebase.firestore)
+            implementation(libs.firebase.analytics)
+            implementation(libs.firebase.crashlytics)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
