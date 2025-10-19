@@ -16,7 +16,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -26,15 +26,16 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.com.google.firebase.firebase.analytics)
-            implementation(libs.com.google.firebase.firebase.crashlytics)
-            implementation(libs.google.firebase.firestore)
-            implementation(libs.google.firebase.auth)
+            implementation(project.dependencies.platform("com.google.firebase:firebase-bom:34.4.0"))
+            implementation("com.google.firebase:firebase-analytics")
+            implementation("com.google.firebase:firebase-auth")
+            implementation("com.google.firebase:firebase-firestore")
+            implementation("com.google.firebase:firebase-crashlytics")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -45,9 +46,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(libs.firebase.firestore)
-            implementation(libs.firebase.analytics)
-            implementation(libs.firebase.crashlytics)
+            //implementation(libs.gitlive.firebase.firestore)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -83,6 +82,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.ui.unit.android)
+    implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.benchmark.traceprocessor.android)
     debugImplementation(compose.uiTooling)
 }
-
