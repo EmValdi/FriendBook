@@ -1,3 +1,5 @@
 package org.junia.friendbook.data
 
-data class user()
+data class user(
+    var email: String
+)
