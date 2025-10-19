@@ -36,6 +36,7 @@ kotlin {
             implementation("com.google.firebase:firebase-auth")
             implementation("com.google.firebase:firebase-firestore")
             implementation("com.google.firebase:firebase-crashlytics")
+            //implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -86,6 +87,6 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.benchmark.traceprocessor.android)
     implementation(libs.androidx.navigation.runtime.android)
-    //implementation(libs.androidx.navigation.compose.jvmstubs)
+    implementation(libs.androidx.media3.common.ktx)
     debugImplementation(compose.uiTooling)
 }

@@ -9,20 +9,22 @@ import androidx.compose.ui.graphics.Color
 
 private val DarkColorScheme = darkColorScheme(
     primary = ButtonBlue,
-    secondary = PurpleGrey80,
+    secondary = Grey,
     tertiary = Pink80,
     background = White,
     onPrimary = White,
-    onBackground = Black
+    onBackground = Black,
+    error = Red
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = ButtonBlue,
-    secondary = PurpleGrey40,
+    secondary = Grey,
     tertiary = Pink40,
     background = White,
     onPrimary = White,
-    onBackground = Black
+    onBackground = Black,
+    error = Red
 )
 
 // 🌗 Tema multiplataforma (sin dynamic color ni APIs Android)

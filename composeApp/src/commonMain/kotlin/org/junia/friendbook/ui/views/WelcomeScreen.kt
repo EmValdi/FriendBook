@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -36,6 +37,7 @@ fun WelcomeScreen (
 ) {
     Column(modifier = modifier
         .fillMaxSize()
+        .statusBarsPadding()
         .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally)
     {
@@ -48,11 +50,7 @@ fun WelcomeScreen (
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             "Welcome!",
-            style =
-            TextStyle(
-                color = MaterialTheme.colorScheme.onBackground,
-                fontSize = 40.sp
-            )
+            style = MaterialTheme.typography.titleLarge
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
