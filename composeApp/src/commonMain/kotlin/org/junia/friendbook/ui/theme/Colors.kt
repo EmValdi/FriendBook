@@ -14,5 +14,5 @@ val White = Color(0xFFFEFEFE)
 val ButtonBlue = Color(0xFF207CF5)
 val Black = Color(0xFF000000)
 val Grey = Color(0xFFCAC5C5)
-
 val Red = Color(0xFFD30000)
+val TextBlue = Color(0xFF16446E)

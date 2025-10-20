@@ -47,7 +47,7 @@ class SignupViewModel: ViewModel() {
 
     fun isValidEmail(): Boolean {
         val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
-        if(confirmEmail.isBlank()){
+        if(email.isBlank()){
             emailError = Strings.blankEmailError
             return false
         }

@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 private val DarkColorScheme = darkColorScheme(
     primary = ButtonBlue,
     secondary = Grey,
-    tertiary = Pink80,
+    tertiary = TextBlue,
     background = White,
     onPrimary = White,
     onBackground = Black,
@@ -20,7 +20,7 @@ private val DarkColorScheme = darkColorScheme(
 private val LightColorScheme = lightColorScheme(
     primary = ButtonBlue,
     secondary = Grey,
-    tertiary = Pink40,
+    tertiary = TextBlue,
     background = White,
     onPrimary = White,
     onBackground = Black,
