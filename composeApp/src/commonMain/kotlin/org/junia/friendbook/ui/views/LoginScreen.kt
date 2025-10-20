@@ -51,7 +51,7 @@ fun LoginScreen (
             "Success" -> {
                 snackbarHostState.showSnackbar("Successful Login!")
                 loginViewmodel.clearLoginResult()
-                navController.navigate(FriendbookScreen.Login.name)
+                navController.navigate(FriendbookScreen.Friendlist.name)
             }
             null -> Unit
             else -> {

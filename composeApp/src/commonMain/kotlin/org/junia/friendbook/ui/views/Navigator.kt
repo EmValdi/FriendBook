@@ -33,6 +33,9 @@ fun FriendbookApp(
         composable(route = FriendbookScreen.Signup.name){
             SignupScreen(navController)
         }
+        composable(route = FriendbookScreen.Friendlist.name){
+            FriendlistScreen(navController)
+        }
     }
 }
 
