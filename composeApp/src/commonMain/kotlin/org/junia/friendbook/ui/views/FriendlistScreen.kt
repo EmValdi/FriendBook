@@ -70,6 +70,10 @@ fun FriendlistScreen(
                 Modifier.statusBarsPadding()
             )
         },
+        bottomBar = {
+            BottomNavBar(navController)
+
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {

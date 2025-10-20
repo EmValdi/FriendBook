@@ -11,9 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import org.jetbrains.compose.resources.painterResource
 import friendbook.composeapp.generated.resources.Res
 import friendbook.composeapp.generated.resources.about_page
+import org.junia.friendbook.ui.views.BottomNavBar
 
 /**
  * About screen (single page)
@@ -29,12 +31,19 @@ import friendbook.composeapp.generated.resources.about_page
  */
 
 @Composable
-fun AboutScreen() {
-    Scaffold { padding ->
+fun AboutScreen(
+    navController: NavHostController,
+    modifier: Modifier = Modifier
+) {
+    Scaffold(
+        bottomBar = {
+            BottomNavBar(navController)
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 // Respect Scaffold insets
-                .padding(padding)
+                .padding(innerPadding)
                 // Add safe area for status bar so the title never overlaps the clock/notch
                 .windowInsetsPadding(WindowInsets.statusBars)
                 .fillMaxSize()

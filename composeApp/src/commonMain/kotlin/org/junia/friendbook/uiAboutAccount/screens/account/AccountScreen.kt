@@ -2,6 +2,7 @@ package org.junia.friendbook.uiAboutAccount.screens.account
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -10,10 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import org.jetbrains.compose.resources.painterResource
 import friendbook.composeapp.generated.resources.Res
 import friendbook.composeapp.generated.resources.person_icon
 import friendbook.composeapp.generated.resources.pencil
+import org.junia.friendbook.ui.views.BottomNavBar
 
 /**
  * Account screen (frontend only, no Firebase connection yet)
@@ -26,18 +29,32 @@ import friendbook.composeapp.generated.resources.pencil
  */
 @Composable
 fun AccountScreen(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
     email: String = "rintaro.sato@student.junia.com",
     userName: String = "Rintaro",
     onClickEdit: () -> Unit = {},
     onClickLogout: () -> Unit = {}
 ) {
     Scaffold(
-        topBar = { SimpleTopBar(title = "Account", onClickEdit = onClickEdit) }
-    ) { padding ->
+        topBar = {
+            // Pasamos el modifier con statusBarsPadding aquí
+            SimpleTopBar(
+                title = "Account",
+                onClickEdit = onClickEdit,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .statusBarsPadding() // ✅ esto añadirá el padding superior necesario
+            )
+        },
+        bottomBar = {
+            BottomNavBar(navController)
+        }
+    ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
+            modifier = modifier
+                .fillMaxSize()              // primero ocupar todo el espacio disponible
+                .padding(innerPadding)     // luego aplicar el padding que deja el Scaffold (topBar + bottomBar)
                 .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -78,19 +95,23 @@ fun AccountScreen(
 
 /**
  * Custom top bar to replace TopAppBar (stable API only).
- * - Title at the left
- * - Edit button at the right
+ * - Ahora usa el modifier pasado desde arriba (IMPORTANTE)
  */
 @Composable
 private fun SimpleTopBar(
     title: String,
-    onClickEdit: () -> Unit
+    onClickEdit: () -> Unit,
+    modifier: Modifier = Modifier // valor por defecto
 ) {
-    Surface(tonalElevation = 3.dp) {
+    // Aplica el modifier recibido (que incluye statusBarsPadding desde el caller)
+    Surface(
+        modifier = modifier,
+        tonalElevation = 3.dp
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
+                .height(56.dp) // altura de la barra de herramientas (contenido)
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -112,14 +133,21 @@ private fun SimpleTopBar(
 
 /** Small reusable component for displaying read-only info. */
 @Composable
-private fun ReadonlyField(label: String, value: String) {
+private fun ReadonlyField(
+    label: String,
+    value: String
+) {
     Card {
         Column(
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 14.dp)
+                .padding(
+                    horizontal = 16.dp,
+                    vertical = 14.dp)
         ) {
-            Text(label, style = MaterialTheme.typography.labelMedium)
+            Text(label,
+                style = MaterialTheme.typography.labelMedium
+            )
             Spacer(Modifier.height(6.dp))
             Text(
                 value,
