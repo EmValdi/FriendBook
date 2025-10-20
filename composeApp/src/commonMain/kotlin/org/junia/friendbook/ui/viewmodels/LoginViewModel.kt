@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.launch
+import org.junia.friendbook.data.SessionData
 import org.junia.friendbook.data.interfaces.getAuthPlatform
 import org.junia.friendbook.ui.Strings
 
@@ -63,7 +64,10 @@ class LoginViewModel: ViewModel() {
         kotlinx.coroutines.MainScope().launch {
             val result = auth.logIn(email, password)
             loginResult = result.fold(
-                onSuccess = { "Success" },
+                onSuccess = {
+                    SessionData.currentUid = auth.currentUser()!!
+                    "Success"
+                            },
                 onFailure = { it.message ?: "Unknown Error, Try again later" }
             )
         }

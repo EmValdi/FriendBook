@@ -1,7 +1,5 @@
 package org.junia.friendbook.ui
 
-import org.junia.friendbook.data.Testdata
-
 object Strings {
     val emailLabel = "Email"
     val confirmEmailLabel = "Confirm Email"
@@ -16,5 +14,4 @@ object Strings {
 
     val friendlistTop = "Your Friends"
     val back_button = "Back"
-    val friendAmount = "${Testdata().loadData().size} friends"
 }

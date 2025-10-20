@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,9 +58,15 @@ fun FriendlistScreen(
     modifier: Modifier = Modifier,
     friendslistViewmodel: FriendslistViewModel = viewModel()
 ){
+    LaunchedEffect(Unit) {
+        friendslistViewmodel.loadFriends()
+        println(friendslistViewmodel.userFriendsList)
+    }
+
     Scaffold(
         topBar = {
             FriendlistBar(
+                friendslistViewmodel,
                 Modifier.statusBarsPadding()
             )
         },
@@ -74,7 +81,7 @@ fun FriendlistScreen(
         },
     ) { innerPadding ->
         Spacer(modifier = Modifier.height(20.dp))
-        FriendList(friendList = Testdata().loadData(),
+        FriendList(friendList = friendslistViewmodel.userFriendsList,
             modifier = Modifier.padding(innerPadding))
     }
 }
@@ -82,6 +89,7 @@ fun FriendlistScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FriendlistBar(
+    friendslistViewmodel: FriendslistViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
@@ -97,7 +105,7 @@ fun FriendlistBar(
                     )
                     Spacer(modifier = Modifier.width(25.dp))
                     Text(
-                        text = Strings.friendAmount,
+                        text = "${friendslistViewmodel.userFriendsList.size} friends",
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                         style = MaterialTheme.typography.headlineSmall
                     )
