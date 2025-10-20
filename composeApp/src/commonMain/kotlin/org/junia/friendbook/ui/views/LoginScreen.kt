@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -49,7 +50,9 @@ fun LoginScreen (
     LaunchedEffect(loginStatus) {
         when (loginStatus) {
             "Success" -> {
-                snackbarHostState.showSnackbar("Successful Login!")
+                snackbarHostState.showSnackbar(
+                    "Successful Login!",
+                    duration = SnackbarDuration.Short)
                 loginViewmodel.clearLoginResult()
                 navController.navigate(FriendbookScreen.Friendlist.name)
             }

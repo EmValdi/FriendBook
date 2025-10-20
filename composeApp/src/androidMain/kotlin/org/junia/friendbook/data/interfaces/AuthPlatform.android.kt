@@ -24,6 +24,10 @@ class AndroidAuthPlatform : AuthPlatform {
             Result.failure(e)
         }
     }
+
+    override suspend fun currentUser(): String?{
+        return auth.currentUser?.uid
+    }
 }
 
 actual fun getAuthPlatform(): AuthPlatform = AndroidAuthPlatform()
