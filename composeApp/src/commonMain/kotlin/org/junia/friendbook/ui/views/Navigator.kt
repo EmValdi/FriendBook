@@ -9,12 +9,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import org.junia.friendbook.uiAboutAccount.screens.about.AboutScreen
+import org.junia.friendbook.uiAboutAccount.screens.account.AccountScreen
 
 enum class FriendbookScreen(){
     Start,
     Login,
     Signup,
-    Friendlist
+    Friendlist,
+    About,
+    Account
 }
 
 @Composable
@@ -35,6 +39,12 @@ fun FriendbookApp(
         }
         composable(route = FriendbookScreen.Friendlist.name){
             FriendlistScreen(navController)
+        }
+        composable(route = FriendbookScreen.About.name){
+            AboutScreen(navController)
+        }
+        composable(route = FriendbookScreen.Account.name){
+            AccountScreen(navController)
         }
     }
 }

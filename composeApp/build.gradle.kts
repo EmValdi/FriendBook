@@ -104,5 +104,6 @@ dependencies {
     implementation(libs.androidx.benchmark.traceprocessor.android)
     implementation(libs.androidx.navigation.runtime.android)
     implementation(libs.androidx.media3.common.ktx)
+    implementation(libs.androidx.foundation.layout.android)
     debugImplementation(compose.uiTooling)
 }
