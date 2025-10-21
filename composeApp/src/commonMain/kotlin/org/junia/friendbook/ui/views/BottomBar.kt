@@ -25,6 +25,7 @@ import friendbook.composeapp.generated.resources.Res
 import friendbook.composeapp.generated.resources.list
 import friendbook.composeapp.generated.resources.information
 import friendbook.composeapp.generated.resources.nopicture
+import friendbook.composeapp.generated.resources.paintpalette
 
 @Composable
 fun BottomNavBar(
@@ -35,6 +36,7 @@ fun BottomNavBar(
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.background
     ) {
+        // --- Friendlist ---
         NavigationBarItem(
             icon = {
                 Icon(
@@ -47,7 +49,7 @@ fun BottomNavBar(
                     "Friendlist",
                     color = MaterialTheme.colorScheme.onBackground
                 )
-                    },
+            },
             selected = navController.currentDestination?.route == FriendbookScreen.Friendlist.name,
             onClick = {
                 navController.navigate(FriendbookScreen.Friendlist.name) {
@@ -57,6 +59,30 @@ fun BottomNavBar(
             }
         )
 
+        // --- Hobbies ---
+        NavigationBarItem(
+            icon = {
+                Icon(
+                    painter = painterResource(Res.drawable.paintpalette),
+                    contentDescription = "Hobbies"
+                )
+            },
+            label = {
+                Text(
+                    "Hobbies",
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            },
+            selected = navController.currentDestination?.route == FriendbookScreen.Hobbylist.name,
+            onClick = {
+                navController.navigate(FriendbookScreen.Hobbylist.name) {
+                    popUpTo(navController.graph.startDestinationId)
+                    launchSingleTop = true
+                }
+            }
+        )
+
+        // --- About ---
         NavigationBarItem(
             icon = {
                 Icon(
@@ -68,8 +94,8 @@ fun BottomNavBar(
                 Text(
                     "About",
                     color = MaterialTheme.colorScheme.onBackground
-                    )
-                    },
+                )
+            },
             selected = navController.currentDestination?.route == FriendbookScreen.About.name,
             onClick = {
                 navController.navigate(FriendbookScreen.About.name) {
@@ -92,7 +118,7 @@ fun BottomNavBar(
                     "Account",
                     color = MaterialTheme.colorScheme.onBackground
                 )
-                    },
+            },
             selected = navController.currentDestination?.route == FriendbookScreen.Account.name,
             onClick = {
                 navController.navigate(FriendbookScreen.Account.name) {

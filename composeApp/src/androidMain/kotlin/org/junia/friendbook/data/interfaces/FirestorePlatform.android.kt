@@ -12,8 +12,9 @@ import com.google.firebase.firestore.toObject
 import android.content.Context
 import com.google.android.gms.common.util.CollectionUtils.mapOf
 import kotlinx.coroutines.tasks.await
+import org.junia.friendbook.data.Hobby
 
-class AndroidFirestorePlatform: FirestorePlatform{
+class AndroidFirestorePlatform: FirestorePlatform {
     val db = Firebase.firestore
 
     override suspend fun getFriends(uid: String): Result<MutableList<friend>> {
@@ -55,9 +56,9 @@ class AndroidFirestorePlatform: FirestorePlatform{
                 .add(friendData)
                 .await()
             Result.success(Unit)
-    }catch (e: Exception){
-        Result.failure(e)
-    }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun editFriend(friend: friend, id: String): Result<Unit> {
@@ -97,6 +98,75 @@ class AndroidFirestorePlatform: FirestorePlatform{
         }
     }
 
+    override suspend fun getHobbies(): Result<MutableList<Hobby>> {
+        return try {
+            val documents = db.collection("hobbies")
+                .get()
+                .await()
+
+            var hobbyList: MutableList<Hobby> = mutableStateListOf()
+
+            for (document in documents) {
+                Log.d(TAG, "${document.id} => ${document.data}")
+                val hobby = document.toObject<Hobby>()
+                hobby.id = document.id
+                hobbyList.add(hobby)
+            }
+
+            Result.success(hobbyList)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun addHobby(hobby: Hobby): Result<Unit> {
+        return try {
+            val data = hashMapOf(
+                "name" to hobby.name,
+                "description" to hobby.description
+            )
+
+            db.collection("hobbies")
+                .add(data)
+                .await()
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun editHobby(hobby: Hobby, id: String): Result<Unit> {
+        return try {
+            val data: Map<String, Any> = hashMapOf(
+                "name" to hobby.name,
+                "description" to hobby.description
+            )
+
+            db.collection("hobbies")
+                .document(id)
+                .update(data)
+                .await()
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun deleteHobby(id: String): Result<Unit> {
+        return try {
+            db.collection("hobbies")
+                .document(id)
+                .delete()
+                .await()
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+
+    }
 }
 
 actual fun getFirestorePlatform(): FirestorePlatform = AndroidFirestorePlatform()
