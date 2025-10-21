@@ -79,7 +79,7 @@ fun FriendlistScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    // Acción para agregar un nuevo dato
+                    navController.navigate(FriendbookScreen.Addfriend.name)
                 }
             ) {
                 Icon(painter = painterResource(Res.drawable.addbutton), contentDescription = "Agregar")

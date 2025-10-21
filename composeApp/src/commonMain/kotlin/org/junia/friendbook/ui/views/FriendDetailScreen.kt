@@ -55,7 +55,7 @@ fun FriendDetailScreen(
             TopAppBar(
                 title = { Text("Name", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {navController.navigate(FriendbookScreen.Friendlist.name)}) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 },

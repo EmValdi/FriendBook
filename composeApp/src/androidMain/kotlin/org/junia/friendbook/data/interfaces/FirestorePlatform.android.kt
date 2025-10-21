@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import android.content.Context
+import com.google.android.gms.common.util.CollectionUtils.mapOf
 import kotlinx.coroutines.tasks.await
 
 class AndroidFirestorePlatform: FirestorePlatform{
@@ -35,6 +36,27 @@ class AndroidFirestorePlatform: FirestorePlatform{
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun addFriend(friend: friend, uid: String): Result<Unit> {
+        return try {
+            val friendData = hashMapOf(
+                "name" to friend.name,
+                "country" to friend.country,
+                "phone_number" to friend.phone_number,
+                "instagram" to friend.instagram,
+                "school" to friend.school,
+                "hobbies" to friend.hobbies,
+                "source_uid" to uid
+            )
+            db
+                .collection("friends")
+                .add(friendData)
+                .await()
+            Result.success(Unit)
+    }catch (e: Exception){
+        Result.failure(e)
+    }
     }
 
 }
