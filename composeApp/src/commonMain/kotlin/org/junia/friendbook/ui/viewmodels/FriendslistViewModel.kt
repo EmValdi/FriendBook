@@ -44,8 +44,8 @@ class FriendslistViewModel: ViewModel() {
     fun onPhoneNumberChange(newValue: String) { phoneNumber = newValue }
     fun onInstagramChange(newValue: String) { instagram = newValue }
     fun onSchoolChange(newValue: String) { school = newValue }
-    fun onHobbiesChange(newValue: String) {
-        hobbies = newValue.split(",")?.map { it.trim() } ?: emptyList()
+    fun onHobbiesChange(newValue: List<String>) {
+        hobbies = newValue
     }
 
     val db = getFirestorePlatform()

@@ -28,6 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,13 +44,18 @@ import friendbook.composeapp.generated.resources.nopicture
 import org.jetbrains.compose.resources.painterResource
 import org.junia.friendbook.ui.viewmodels.AddfriendViewModel
 import org.junia.friendbook.ui.viewmodels.FriendslistViewModel
+import org.junia.friendbook.ui.viewmodels.HobbyViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditFriendScreen(
     navController: NavHostController,
-    friendsViewModel: FriendslistViewModel
+    friendsViewModel: FriendslistViewModel,
+    hobbyViewModel: HobbyViewModel = viewModel()
 ) {
+    LaunchedEffect(Unit) {
+        hobbyViewModel.getHobbies()
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -109,7 +115,11 @@ fun EditFriendScreen(
                 InfoInputField("Phone number", friendsViewModel.phoneNumber) { friendsViewModel.onPhoneNumberChange(it) }
                 InfoInputField("Instagram Account", friendsViewModel.instagram) { friendsViewModel.onInstagramChange(it) }
                 InfoInputField("School Name", friendsViewModel.school) { friendsViewModel.onSchoolChange(it) }
-                InfoInputField("Hobbies", friendsViewModel.hobbies.joinToString(", ")) { friendsViewModel.onHobbiesChange(it) }
+                HobbiesDropdown(
+                    selectedHobbies = friendsViewModel.hobbies,
+                    hobbyViewModel = hobbyViewModel,
+                    onHobbiesSelected = { friendsViewModel.onHobbiesChange(it) }
+                )
 
                 Spacer(Modifier.height(100.dp))
             }
