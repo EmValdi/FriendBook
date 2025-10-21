@@ -2,6 +2,7 @@ package org.junia.friendbook.ui.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import io.kamel.image.KamelImage
@@ -50,17 +52,17 @@ import friendbook.composeapp.generated.resources.Res
 import friendbook.composeapp.generated.resources.nopicture
 import friendbook.composeapp.generated.resources.addbutton
 import io.kamel.image.asyncPainterResource
+import kotlinx.coroutines.launch
 import org.junia.friendbook.data.Testdata
 
 @Composable
 fun FriendlistScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    friendslistViewmodel: FriendslistViewModel = viewModel()
+    friendslistViewmodel: FriendslistViewModel
 ){
     LaunchedEffect(Unit) {
         friendslistViewmodel.loadFriends()
-        println(friendslistViewmodel.userFriendsList)
     }
 
     Scaffold(
@@ -86,14 +88,16 @@ fun FriendlistScreen(
     ) { innerPadding ->
         Spacer(modifier = Modifier.height(20.dp))
         FriendList(friendList = friendslistViewmodel.userFriendsList,
-            modifier = Modifier.padding(innerPadding))
+            modifier = Modifier.padding(innerPadding),
+            navController,
+            friendslistViewmodel)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FriendlistBar(
-    friendslistViewmodel: FriendslistViewModel = viewModel(),
+    friendslistViewmodel: FriendslistViewModel,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
@@ -127,16 +131,35 @@ fun FriendlistBar(
 }
 
 @Composable
-fun FriendList(friendList: List<friend>, modifier: Modifier = Modifier){
+fun FriendList(friendList: List<friend>,
+               modifier: Modifier = Modifier,
+               navController: NavHostController,
+               friendslistViewmodel: FriendslistViewModel
+){
     LazyColumn(modifier = modifier){
         items(friendList){
-                friend -> FriendCard(friend = friend, modifier = Modifier.padding(0.dp))
+                friend -> FriendCard(
+            friend = friend,
+            modifier = Modifier.padding(0.dp)
+                .clickable{
+                    friendslistViewmodel.setDetail(friend.name)
+
+                }
+                )
+        }
+    }
+    val currentDetail by friendslistViewmodel::currentDetail
+    if (currentDetail != null) {
+        LaunchedEffect(currentDetail) {
+            navController.navigate(FriendbookScreen.Frienddetail.name)
         }
     }
 }
 
 @Composable
-fun FriendCard(friend: friend, modifier: Modifier = Modifier) {
+fun FriendCard(
+    friend: friend,
+    modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .height(68.dp),
