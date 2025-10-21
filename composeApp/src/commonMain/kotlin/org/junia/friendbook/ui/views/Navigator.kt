@@ -25,7 +25,8 @@ enum class FriendbookScreen(){
     About,
     Account,
     Frienddetail,
-    Addfriend
+    Addfriend,
+    Editfriend
 }
 
 @Composable
@@ -59,6 +60,9 @@ fun FriendbookApp(
         }
         composable(route = FriendbookScreen.Addfriend.name){
             AddFriendScreen(navController)
+        }
+        composable(route = FriendbookScreen.Editfriend.name){
+            EditFriendScreen(navController, friendsViewModel)
         }
     }
 }

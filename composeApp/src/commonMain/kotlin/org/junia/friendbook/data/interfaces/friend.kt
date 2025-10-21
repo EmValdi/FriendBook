@@ -1,6 +1,7 @@
 package org.junia.friendbook.data.interfaces
 
 data class friend(
+    var id: String = "",
     var name: String = "",
     var country: String = "",
     var phone_number: String = "",
