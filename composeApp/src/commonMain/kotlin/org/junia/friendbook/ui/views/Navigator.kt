@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import org.junia.friendbook.ui.viewmodels.FriendslistViewModel
+import org.junia.friendbook.ui.viewmodels.HobbyViewModel
 import org.junia.friendbook.uiAboutAccount.screens.about.AboutScreen
 import org.junia.friendbook.uiAboutAccount.screens.account.AccountScreen
 
@@ -26,7 +27,11 @@ enum class FriendbookScreen(){
     Account,
     Frienddetail,
     Addfriend,
-    Editfriend
+    Editfriend,
+    Hobbylist,
+    Addhobby,
+    Hobbydetail,
+    Edithobby
 }
 
 @Composable
@@ -34,6 +39,7 @@ fun FriendbookApp(
     navController: NavHostController = rememberNavController()
 ) {
     val friendsViewModel: FriendslistViewModel = viewModel()
+    val hobbyViewModel: HobbyViewModel = viewModel()
     NavHost(navController = navController,
         startDestination = FriendbookScreen.Start.name,
         modifier = Modifier.padding()){
@@ -63,6 +69,18 @@ fun FriendbookApp(
         }
         composable(route = FriendbookScreen.Editfriend.name){
             EditFriendScreen(navController, friendsViewModel)
+        }
+        composable(route = FriendbookScreen.Hobbylist.name){
+            HobbyListScreen(navController, hobbyViewModel)
+        }
+        composable(route = FriendbookScreen.Addhobby.name){
+            AddHobbyScreen(navController)
+        }
+        composable(route = FriendbookScreen.Hobbydetail.name){
+            HobbyDetailScreen(navController, hobbyViewModel)
+        }
+        composable(route = FriendbookScreen.Edithobby.name){
+            HobbyEditScreen(navController, hobbyViewModel)
         }
     }
 }
