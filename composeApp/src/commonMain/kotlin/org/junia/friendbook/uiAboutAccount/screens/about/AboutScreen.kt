@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import friendbook.composeapp.generated.resources.Res
 import friendbook.composeapp.generated.resources.about_page
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * About screen (single page)
@@ -28,6 +29,7 @@ import friendbook.composeapp.generated.resources.about_page
  *  - Any header outside this screen is NOT included here.
  */
 
+@Preview
 @Composable
 fun AboutScreen() {
     Scaffold { padding ->
