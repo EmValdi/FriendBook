@@ -167,6 +167,74 @@ class AndroidFirestorePlatform: FirestorePlatform {
         }
 
     }
+
+    override suspend fun changeUserName(newUserName: String, uid: String): Result<Unit> {
+        return try {
+            val querySnapshot = db.collection("users")
+                .whereEqualTo("uid", uid)
+                .get()
+                .await()
+
+            if (querySnapshot.isEmpty) {
+                throw Exception("User not found")
+            }
+
+            val documentId = querySnapshot.documents.first().id
+
+            val data: Map<String, Any> = mapOf(
+                "name" to newUserName
+            )
+
+            db.collection("users")
+                .document(documentId)
+                .update(data)
+                .await()
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
+    override suspend fun setUserName(UserName: String, uid: String): Result<Unit> {
+        return try {
+            val data: Map<String, Any> = mapOf(
+                "uid" to uid,
+                "name" to UserName
+            )
+
+            db.collection("users")
+                .document(uid)
+                .set(data) // Crea o reemplaza el documento
+                .await()
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getUserName(uid: String): Result<String> {
+        return try {
+            val querySnapshot = db.collection("users")
+                .whereEqualTo("uid", uid)
+                .get()
+                .await()
+
+            if (querySnapshot.isEmpty) {
+                throw Exception("User not found")
+            }
+
+            val document = querySnapshot.documents.first()
+            val name = document.getString("name")
+                ?: throw Exception("Name field not found")
+
+            Result.success(name)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
 
 actual fun getFirestorePlatform(): FirestorePlatform = AndroidFirestorePlatform()

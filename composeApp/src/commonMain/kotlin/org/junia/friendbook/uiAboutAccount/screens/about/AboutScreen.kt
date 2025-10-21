@@ -2,6 +2,8 @@ package org.junia.friendbook.uiAboutAccount.screens.about
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -40,13 +42,13 @@ fun AboutScreen(
             BottomNavBar(navController)
         }
     ) { innerPadding ->
+        // Scrollable Column
         Column(
             modifier = Modifier
-                // Respect Scaffold insets
                 .padding(innerPadding)
-                // Add safe area for status bar so the title never overlaps the clock/notch
                 .windowInsetsPadding(WindowInsets.statusBars)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState()) // <-- Hacerlo scrolleable
                 .padding(horizontal = 20.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -58,20 +60,18 @@ fun AboutScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // --- Image (single) ---
-            // Use ContentScale.Crop if you want edge-to-edge feel,
-            // or ContentScale.Fit to avoid any cropping.
+            // --- Image ---
             Image(
                 painter = painterResource(Res.drawable.about_page),
                 contentDescription = "About image",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(0.6f), // tune (0.55–0.7) to match your design height
+                    .aspectRatio(0.6f),
                 contentScale = ContentScale.Crop
             )
 
-            // NOTE:
-            // Header (outside this file) should be placed by the caller screen.
+            Spacer(Modifier.height(16.dp))
+
         }
     }
 }

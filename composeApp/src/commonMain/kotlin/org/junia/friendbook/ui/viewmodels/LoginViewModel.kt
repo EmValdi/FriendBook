@@ -7,11 +7,13 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.launch
 import org.junia.friendbook.data.SessionData
 import org.junia.friendbook.data.interfaces.getAuthPlatform
+import org.junia.friendbook.data.interfaces.getFirestorePlatform
 import org.junia.friendbook.ui.Strings
 
 class LoginViewModel: ViewModel() {
 
     val auth = getAuthPlatform()
+    val db = getFirestorePlatform()
 
     var loginResult by mutableStateOf<String?>(null)
 
@@ -66,10 +68,14 @@ class LoginViewModel: ViewModel() {
             loginResult = result.fold(
                 onSuccess = {
                     SessionData.currentUid = auth.currentUser()!!
+                    SessionData.userMail = auth.currentMail()!!
+                    val result = db.getUserName(SessionData.currentUid)
+                    SessionData.userName = result.getOrDefault("Unknown")
                     "Success"
                             },
                 onFailure = { it.message ?: "Unknown Error, Try again later" }
             )
         }
     }
+
 }

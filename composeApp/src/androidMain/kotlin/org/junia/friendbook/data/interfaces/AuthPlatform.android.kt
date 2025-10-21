@@ -28,6 +28,23 @@ class AndroidAuthPlatform : AuthPlatform {
     override suspend fun currentUser(): String?{
         return auth.currentUser?.uid
     }
+
+    override suspend fun currentMail(): String?{
+        return auth.currentUser?.email
+    }
+
+    override suspend fun logout() {
+        auth.signOut()
+    }
+
+    override suspend fun changePassword(newPassword: String): Result<Unit> {
+        return try {
+            auth.currentUser?.updatePassword(newPassword)?.await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
 
 actual fun getAuthPlatform(): AuthPlatform = AndroidAuthPlatform()

@@ -6,11 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.launch
 import org.junia.friendbook.data.interfaces.getAuthPlatform
+import org.junia.friendbook.data.interfaces.getFirestorePlatform
 import org.junia.friendbook.ui.Strings
 
 class SignupViewModel: ViewModel() {
 
     val auth = getAuthPlatform()
+
+    val db = getFirestorePlatform()
 
     var signupResult by mutableStateOf<String?>(null)
 
@@ -98,7 +101,22 @@ class SignupViewModel: ViewModel() {
         kotlinx.coroutines.MainScope().launch {
             val result = auth.signUp(email, password)
             signupResult = result.fold(
-                onSuccess = { "Success" },
+                onSuccess = {
+                    setUserName()
+                    "Success"
+                            },
+                onFailure = { it.message ?: "Unknown Error, Try again later" }
+            )
+        }
+    }
+
+    fun setUserName(){
+        kotlinx.coroutines.MainScope().launch {
+            val result = db.setUserName("NewUser", auth.currentUser()!!)
+            val userNameResult = result.fold(
+                onSuccess = {
+                    "Success"
+                },
                 onFailure = { it.message ?: "Unknown Error, Try again later" }
             )
         }

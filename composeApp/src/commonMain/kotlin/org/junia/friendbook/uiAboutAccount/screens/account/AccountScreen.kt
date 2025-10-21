@@ -1,9 +1,11 @@
 package org.junia.friendbook.uiAboutAccount.screens.account
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,7 +18,11 @@ import org.jetbrains.compose.resources.painterResource
 import friendbook.composeapp.generated.resources.Res
 import friendbook.composeapp.generated.resources.person_icon
 import friendbook.composeapp.generated.resources.pencil
+import kotlinx.coroutines.launch
+import org.junia.friendbook.data.SessionData
+import org.junia.friendbook.data.interfaces.getAuthPlatform
 import org.junia.friendbook.ui.views.BottomNavBar
+import org.junia.friendbook.ui.views.FriendbookScreen
 
 /**
  * Account screen (frontend only, no Firebase connection yet)
@@ -41,7 +47,7 @@ fun AccountScreen(
             // Pasamos el modifier con statusBarsPadding aquí
             SimpleTopBar(
                 title = "Account",
-                onClickEdit = onClickEdit,
+                navController,
                 modifier = Modifier
                     .fillMaxWidth()
                     .statusBarsPadding() // ✅ esto añadirá el padding superior necesario
@@ -80,14 +86,20 @@ fun AccountScreen(
             }
 
             // --- Read-only fields ---
-            ReadonlyField(label = "Email", value = email)
-            ReadonlyField(label = "Password", value = "********")
-            ReadonlyField(label = "Username", value = userName)
+            ReadonlyField(label = "Email", value = SessionData.userMail)
+            ReadonlyField(label = "Username", value = SessionData.userName)
 
             Spacer(Modifier.height(12.dp))
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = onClickLogout
+                onClick = {
+                    navController.navigate(FriendbookScreen.Login.name)
+                    val auth = getAuthPlatform()
+                    kotlinx.coroutines.MainScope().launch {
+                        auth.logout()
+                    }
+
+                }
             ) { Text("Logout") }
         }
     }
@@ -100,12 +112,12 @@ fun AccountScreen(
 @Composable
 private fun SimpleTopBar(
     title: String,
-    onClickEdit: () -> Unit,
-    modifier: Modifier = Modifier // valor por defecto
+    navController: NavHostController,
+    modifier: Modifier = Modifier
 ) {
-    // Aplica el modifier recibido (que incluye statusBarsPadding desde el caller)
     Surface(
         modifier = modifier,
+        color = MaterialTheme.colorScheme.background,
         tonalElevation = 3.dp
     ) {
         Row(
@@ -118,9 +130,12 @@ private fun SimpleTopBar(
         ) {
             Text(
                 text = title,
+                color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
             )
-            IconButton(onClick = onClickEdit) {
+            IconButton(onClick = {
+                navController.navigate(FriendbookScreen.EditAccount.name)
+            }) {
                 Image(
                     painter = painterResource(Res.drawable.pencil),
                     contentDescription = "Edit account",
@@ -137,7 +152,12 @@ private fun ReadonlyField(
     label: String,
     value: String
 ) {
-    Card {
+    Card (
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
+        border = BorderStroke(1.dp, color=MaterialTheme.colorScheme.onBackground)
+    ){
         Column(
             Modifier
                 .fillMaxWidth()
@@ -146,12 +166,14 @@ private fun ReadonlyField(
                     vertical = 14.dp)
         ) {
             Text(label,
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(Modifier.height(6.dp))
             Text(
                 value,
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
     }

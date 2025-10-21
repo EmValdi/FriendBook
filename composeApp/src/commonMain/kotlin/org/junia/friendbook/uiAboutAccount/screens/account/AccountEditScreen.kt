@@ -11,12 +11,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import org.jetbrains.compose.resources.painterResource
 import friendbook.composeapp.generated.resources.Res
 import friendbook.composeapp.generated.resources.person_icon
 import friendbook.composeapp.generated.resources.left_arrow
 import friendbook.composeapp.generated.resources.check
+import org.junia.friendbook.data.SessionData
+import org.junia.friendbook.ui.viewmodels.EditAccountViewModel
+import org.junia.friendbook.ui.views.FriendbookScreen
 
 /**
  * Editable Account screen (frontend only).
@@ -27,22 +33,18 @@ import friendbook.composeapp.generated.resources.check
  */
 @Composable
 fun AccountEditScreen(
-    initialEmail: String = "rintaro.sato@student.junia.com",
-    initialUserName: String = "Rintaro",
-    onBack: () -> Unit = {},
-    onSave: (email: String, newPassword: String?, userName: String) -> Unit = { _, _, _ -> },
+    navController: NavHostController,
+    initialEmail: String = SessionData.userMail,
+    initialUserName: String = "",
+    editAccountViewModel: EditAccountViewModel = viewModel()
 ) {
-    var email by rememberSaveable { mutableStateOf(initialEmail) }
-    var password by rememberSaveable { mutableStateOf("") } // empty = unchanged
-    var userName by rememberSaveable { mutableStateOf(initialUserName) }
-    var showPassword by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             EditTopBar(
                 title = "Edit your account",
-                onBack = onBack,
-                onSave = { onSave(email.trim(), password.ifBlank { null }, userName.trim()) }
+                editAccountViewModel,
+                navController
             )
         }
     ) { padding ->
@@ -74,31 +76,22 @@ fun AccountEditScreen(
                 }
             }
 
-            // --- Fields ---
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = editAccountViewModel.password,
+                onValueChange = { editAccountViewModel.password = it },
                 label = { Text("Password (new)") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if (editAccountViewModel.showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    val text = if (showPassword) "Hide" else "Show"
-                    TextButton(onClick = { showPassword = !showPassword }) { Text(text) }
+                    val text = if (editAccountViewModel.showPassword) "Hide" else "Show"
+                    TextButton(onClick = { editAccountViewModel.showPassword = !editAccountViewModel.showPassword }) { Text(text) }
                 }
             )
 
             OutlinedTextField(
-                value = userName,
-                onValueChange = { userName = it },
+                value = editAccountViewModel.userName,
+                onValueChange = { editAccountViewModel.userName = it },
                 label = { Text("User name") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
@@ -111,19 +104,29 @@ fun AccountEditScreen(
 @Composable
 private fun EditTopBar(
     title: String,
-    onBack: () -> Unit,
-    onSave: () -> Unit
+    editAccountViewModel: EditAccountViewModel,
+    navController: NavHostController
 ) {
-    Surface(tonalElevation = 3.dp) {
+    Surface(
+        tonalElevation = 3.dp,
+        color = MaterialTheme.colorScheme.background,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()) // evita empalme con status bar
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
-                .padding(horizontal = 4.dp),
+                .padding(horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // --- Back button ---
-            IconButton(onClick = onBack) {
+            IconButton(
+                onClick = {
+                    navController.navigate(FriendbookScreen.Account.name)
+                }
+            ) {
                 Image(
                     painter = painterResource(Res.drawable.left_arrow),
                     contentDescription = "Back",
@@ -137,11 +140,29 @@ private fun EditTopBar(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 8.dp), // evita que el texto se amontone con los botones
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
             // --- Save button ---
-            IconButton(onClick = onSave) {
+            IconButton(onClick = {
+                when {
+                    editAccountViewModel.password.isNotBlank() && editAccountViewModel.userName.isNotBlank() -> {
+                        editAccountViewModel.changePassword(navController)
+                        editAccountViewModel.changeUserName(navController)
+                    }
+                    editAccountViewModel.password.isNotBlank() -> {
+                        editAccountViewModel.changePassword(navController)
+                    }
+                    editAccountViewModel.userName.isNotBlank() -> {
+                        editAccountViewModel.changeUserName(navController)
+                    }
+
+                }
+            }) {
                 Image(
                     painter = painterResource(Res.drawable.check),
                     contentDescription = "Save",

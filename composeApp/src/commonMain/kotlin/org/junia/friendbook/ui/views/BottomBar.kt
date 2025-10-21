@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
@@ -64,7 +65,8 @@ fun BottomNavBar(
             icon = {
                 Icon(
                     painter = painterResource(Res.drawable.paintpalette),
-                    contentDescription = "Hobbies"
+                    contentDescription = "Hobbies",
+                    Modifier.size(58.dp)
                 )
             },
             label = {

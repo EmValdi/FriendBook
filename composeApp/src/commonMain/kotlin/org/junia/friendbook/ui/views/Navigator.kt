@@ -16,6 +16,7 @@ import androidx.navigation.navArgument
 import org.junia.friendbook.ui.viewmodels.FriendslistViewModel
 import org.junia.friendbook.ui.viewmodels.HobbyViewModel
 import org.junia.friendbook.uiAboutAccount.screens.about.AboutScreen
+import org.junia.friendbook.uiAboutAccount.screens.account.AccountEditScreen
 import org.junia.friendbook.uiAboutAccount.screens.account.AccountScreen
 
 enum class FriendbookScreen(){
@@ -31,7 +32,8 @@ enum class FriendbookScreen(){
     Hobbylist,
     Addhobby,
     Hobbydetail,
-    Edithobby
+    Edithobby,
+    EditAccount
 }
 
 @Composable
@@ -81,6 +83,9 @@ fun FriendbookApp(
         }
         composable(route = FriendbookScreen.Edithobby.name){
             HobbyEditScreen(navController, hobbyViewModel)
+        }
+        composable(route = FriendbookScreen.EditAccount.name){
+            AccountEditScreen(navController)
         }
     }
 }

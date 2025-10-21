@@ -12,6 +12,10 @@ interface FirestorePlatform {
     suspend fun addHobby(hobby: Hobby): Result<Unit>
     suspend fun editHobby(hobby: Hobby, id: String): Result<Unit>
     suspend fun deleteHobby(id: String): Result<Unit>
+
+    suspend fun setUserName(newUserName: String, uid: String): Result<Unit>
+    suspend fun changeUserName(UserName: String, uid: String): Result<Unit>
+    suspend fun getUserName(uid: String): Result<String>
 }
 
 expect fun getFirestorePlatform(): FirestorePlatform
