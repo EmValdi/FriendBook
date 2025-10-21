@@ -87,4 +87,18 @@ class FriendslistViewModel: ViewModel() {
         }
     }
 
+    fun deleteFriend(navController: NavController) {
+        kotlinx.coroutines.MainScope().launch {
+            val result = db.deleteFriend(currentDetail.id)
+
+            result.onSuccess {
+                navController.navigate(FriendbookScreen.Friendlist.name)
+                currentDetail = friend("")
+            }.onFailure { e ->
+                println(id)
+                println(e)
+            }
+        }
+    }
+
 }
