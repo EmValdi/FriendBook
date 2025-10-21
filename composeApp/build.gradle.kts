@@ -106,5 +106,6 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.android)
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.android)
     debugImplementation(compose.uiTooling)
 }

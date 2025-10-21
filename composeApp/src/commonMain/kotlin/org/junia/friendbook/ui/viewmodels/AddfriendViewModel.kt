@@ -40,8 +40,8 @@ class AddfriendViewModel: ViewModel() {
     fun onPhoneNumberChange(newValue: String) { phoneNumber = newValue }
     fun onInstagramChange(newValue: String) { instagram = newValue }
     fun onSchoolChange(newValue: String) { school = newValue }
-    fun onHobbiesChange(newValue: String) {
-        hobbies = newValue.split(",").map { it.trim() }
+    fun onHobbiesChange(newValue: List<String>) {
+        hobbies = newValue
     }
 
     fun addFriend(navController: NavController) {
@@ -53,7 +53,6 @@ class AddfriendViewModel: ViewModel() {
                 instagram = instagram,
                 school = school,
                 hobbies = hobbies,
-                // Si no los manejas todavía, los dejamos con valores por defecto:
                 fav_pokemon = "",
                 picture = ""
             )
