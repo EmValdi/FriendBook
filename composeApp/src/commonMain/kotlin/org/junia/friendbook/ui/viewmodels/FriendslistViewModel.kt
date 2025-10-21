@@ -15,6 +15,9 @@ class FriendslistViewModel: ViewModel() {
     var userFriendsList by mutableStateOf<List<friend>>(emptyList())
         private set
 
+    var currentDetail by mutableStateOf<friend?>(null)
+        private set
+
     val db = getFirestorePlatform()
 
     fun loadFriends() {
@@ -22,6 +25,11 @@ class FriendslistViewModel: ViewModel() {
             val result = db.getFriends(SessionData.currentUid)
             userFriendsList = result.getOrNull()?: emptyList()
         }
+    }
+
+    fun setDetail(name: String?) {
+        val friend = userFriendsList.find{it.name == name}
+        currentDetail = friend
     }
 
 }
