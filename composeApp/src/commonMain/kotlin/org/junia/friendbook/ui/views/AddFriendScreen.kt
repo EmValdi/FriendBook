@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialogDefaults.containerColor
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,7 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
@@ -140,23 +141,36 @@ fun AddFriendScreen(
 }
 
 @Composable
-fun InfoInputField(label: String, value: String, onValueChange: (String) -> Unit) {
+fun InfoInputField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
     ) {
-        Text(label, color = Color.Gray, fontSize = 14.sp)
+        Text(
+            text = label,
+            color = Color.Gray,
+            fontSize = 14.sp
+        )
         TextField(
             value = value,
             onValueChange = onValueChange,
-            textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black),
-            /*colors = TextFieldDefaults.colors(
-                containerColor = Color.Transparent,
+            textStyle = TextStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                color = Color.Black
+            ),
+            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            ),*/
+                disabledIndicatorColor = Color.Transparent,
+                cursorColor = Color.Black
+            ),
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
