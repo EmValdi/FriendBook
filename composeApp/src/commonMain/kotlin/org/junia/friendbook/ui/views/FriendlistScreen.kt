@@ -149,7 +149,7 @@ fun FriendList(friendList: List<friend>,
         }
     }
     val currentDetail by friendslistViewmodel::currentDetail
-    if (currentDetail != null) {
+    if (currentDetail.id != "") {
         LaunchedEffect(currentDetail) {
             navController.navigate(FriendbookScreen.Frienddetail.name)
         }

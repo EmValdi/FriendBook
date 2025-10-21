@@ -38,7 +38,7 @@ fun FriendDetailScreen(
     friendslistViewmodel: FriendslistViewModel
 ) {
     var friend = friendslistViewmodel.currentDetail
-    println(friendslistViewmodel.currentDetail)
+    println(friendslistViewmodel.currentDetail.id)
 
     if (friend == null) {
         Box(
@@ -55,12 +55,15 @@ fun FriendDetailScreen(
             TopAppBar(
                 title = { Text("Name", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = {navController.navigate(FriendbookScreen.Friendlist.name)}) {
+                    IconButton(onClick = {
+                        navController.navigate(FriendbookScreen.Friendlist.name)
+                        friendslistViewmodel.currentDetail = friend("")
+                    }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {navController.navigate(FriendbookScreen.Editfriend.name)}) {
                         Icon(Icons.Default.Edit, contentDescription = "Edit")
                     }
                 }

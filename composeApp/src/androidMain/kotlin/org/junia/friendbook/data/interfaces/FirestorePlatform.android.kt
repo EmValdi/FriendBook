@@ -28,6 +28,7 @@ class AndroidFirestorePlatform: FirestorePlatform{
             for (document in documents) {
                 Log.d(TAG, "${document.id} => ${document.data}")
                 val friend = document.toObject<friend>()
+                friend.id = document.id
                 friendsList.add(friend)
             }
 
@@ -57,6 +58,43 @@ class AndroidFirestorePlatform: FirestorePlatform{
     }catch (e: Exception){
         Result.failure(e)
     }
+    }
+
+    override suspend fun editFriend(friend: friend, id: String): Result<Unit> {
+        return try {
+            val friendData = hashMapOf(
+                "name" to friend.name,
+                "country" to friend.country,
+                "phone_number" to friend.phone_number,
+                "instagram" to friend.instagram,
+                "school" to friend.school,
+                "hobbies" to friend.hobbies
+            )
+
+            //Log.d("Document",documentId)
+
+            db.collection("friends")
+                .document(id)
+                .update(friendData)
+                .await()
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun deleteFriend(id: String): Result<Unit> {
+        return try {
+            db.collection("friends")
+                .document(id)
+                .delete()
+                .await()  // Espera a que la operación termine
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
 }
